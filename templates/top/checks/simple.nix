@@ -1,21 +1,21 @@
 {
+  nixosTest,
   epnix,
-  # Your EPNix configuration, as defined in flake.nix
-  epnixConfig,
-  pkgs,
+  epnixLib,
+  myIoc,
   ...
 }:
-pkgs.nixosTest {
+nixosTest {
   name = "simple";
 
-  nodes.machine = {config, ...}: {
-    imports = [
-      epnix.nixosModules.ioc
-      epnixConfig
-    ];
-    environment.systemPackages = [pkgs.epnix.epics-base];
+  nodes.machine = {
+    imports = [epnixLib.inputs.self.nixosModules.nixos];
+    environment.systemPackages = [epnix.epics-base];
 
-    systemd.services.ioc = config.epnix.nixos.services.ioc.config;
+    services.iocs.myIoc = {
+      package = myIoc;
+      workingDirectory = "iocBoot/iocMyIoc";
+    };
   };
 
   testScript = ''
