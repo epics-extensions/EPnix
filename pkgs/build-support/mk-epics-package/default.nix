@@ -16,6 +16,7 @@
   depsBuildBuild ? [],
   nativeBuildInputs ? [],
   buildInputs ? [],
+  shellHook ? "",
   ...
 } @ attrs: let
   # remove non standard attributes that cannot be coerced to strings
@@ -55,4 +56,16 @@ in
 
       doCheck = attrs.doCheck or true;
       checkTarget = "runtests";
+
+      shellHook = ''
+        ${lib.optionalString (!isEpicsBase) ''
+          # epics-base is considered a "buildInputs",
+          # not a "nativeBuildInputs",
+          # so it needs to be manually added in to the PATH
+          # in a development shell,
+          addToSearchPath PATH "${epnix.epics-base}/bin"
+        ''}
+
+        ${shellHook}
+      '';
     })
