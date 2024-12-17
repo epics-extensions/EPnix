@@ -1,0 +1,14 @@
+25.05 Release notes
+===================
+
+.. default-domain:: nix
+
+.. role:: nix(code)
+   :language: nix
+
+Breaking changes
+----------------
+
+- The old way of developing IOCs was deprecated,
+  and will be removed in version ``nixos-26.05``.
+  Please follow the migration guide :doc:`../ioc/user-guides/deprecations/migrating-from-modules-development`.

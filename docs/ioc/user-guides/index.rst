@@ -16,5 +16,6 @@ User guides
    ./reccaster.rst
    ./mrf-devices.rst
    ./testing/index.rst
+   ./deprecations/index.rst
 
 .. TODO: make a NixOS test user-guide
