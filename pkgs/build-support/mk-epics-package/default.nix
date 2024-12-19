@@ -10,6 +10,7 @@
 }: {
   pname,
   varname,
+  epics-base ? epnix.epics-base,
   local_config_site ? {},
   local_release ? {},
   isEpicsBase ? false,
@@ -47,7 +48,7 @@ in
       buildInputs =
         buildInputs
         ++ [perl readline]
-        ++ (lib.optional (!isEpicsBase) epnix.epics-base);
+        ++ (lib.optional (!isEpicsBase) epics-base);
 
       setupHook = ./setup-hook.sh;
 
@@ -63,7 +64,7 @@ in
           # not a "nativeBuildInputs",
           # so it needs to be manually added in to the PATH
           # in a development shell,
-          addToSearchPath PATH "${epnix.epics-base}/bin"
+          addToSearchPath PATH "${epics-base}/bin"
         ''}
 
         ${shellHook}
