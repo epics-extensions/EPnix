@@ -12,12 +12,17 @@
       url = "github:minijackson/sphinxcontrib-nixdomain";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-github-actions = {
+      url = "github:nix-community/nix-github-actions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
     self,
     flake-utils,
     nixpkgs,
+    nix-github-actions,
     ...
   } @ inputs: let
     overlay = import ./pkgs self.lib inputs;
@@ -121,5 +126,7 @@
       templates.default = self.templates.top;
 
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.alejandra;
+
+      githubActions = nix-github-actions.lib.mkGithubMatrix {inherit (self) checks;};
     };
 }
