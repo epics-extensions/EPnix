@@ -1,24 +1,18 @@
 {
-  description = "EPICS IOC for <...>";
+  description = "EPICS IOC for migration demonstration purposes";
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
   inputs.epnix.url = "github:epics-extensions/epnix/nixos-24.11";
 
-  # If you have a support module as a separate EPNix repository,
-  # add it as an input here:
-  # ---
-  #inputs.mySupportModule = {
-  #  url = "git+ssh://git@my-server.org/me/exampleApp.git";
-  #  inputs.epnix.follows = "epnix";
-  #};
+  inputs.mySupportModule = {
+    url = "git+ssh://git@my-server.org/me/exampleApp.git";
+    inputs.epnix.follows = "epnix";
+  };
 
-  # If you have an "App" as a separate repository,
-  # add it as an input here:
-  # ---
-  #inputs.exampleApp = {
-  #  url = "git+ssh://git@my-server.org/me/exampleApp.git";
-  #  flake = false;
-  #};
+  inputs.exampleApp = {
+    url = "git+ssh://git@my-server.org/me/exampleApp.git";
+    flake = false;
+  };
 
   outputs = {
     self,
@@ -36,6 +30,8 @@
         overlays = [
           epnix.overlays.default
           self.overlays.default
+
+          inputs.mySupportModule.overlays.default
         ];
       };
     in {
@@ -47,7 +43,7 @@
     })
     // {
       overlays.default = final: _prev: {
-        myIoc = final.callPackage ./ioc.nix {};
+        myIoc = final.callPackage ./ioc.nix {inherit inputs;};
       };
     };
 }

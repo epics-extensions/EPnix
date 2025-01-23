@@ -10,12 +10,14 @@
 }: {
   pname,
   varname,
+  epics-base ? epnix.epics-base,
   local_config_site ? {},
   local_release ? {},
   isEpicsBase ? false,
   depsBuildBuild ? [],
   nativeBuildInputs ? [],
   buildInputs ? [],
+  shellHook ? "",
   ...
 } @ attrs: let
   # remove non standard attributes that cannot be coerced to strings
@@ -46,7 +48,7 @@ in
       buildInputs =
         buildInputs
         ++ [perl readline]
-        ++ (lib.optional (!isEpicsBase) epnix.epics-base);
+        ++ (lib.optional (!isEpicsBase) epics-base);
 
       setupHook = ./setup-hook.sh;
 
@@ -55,4 +57,16 @@ in
 
       doCheck = attrs.doCheck or true;
       checkTarget = "runtests";
+
+      shellHook = ''
+        ${lib.optionalString (!isEpicsBase) ''
+          # epics-base is considered a "buildInputs",
+          # not a "nativeBuildInputs",
+          # so it needs to be manually added in to the PATH
+          # in a development shell,
+          addToSearchPath PATH "${epics-base}/bin"
+        ''}
+
+        ${shellHook}
+      '';
     })

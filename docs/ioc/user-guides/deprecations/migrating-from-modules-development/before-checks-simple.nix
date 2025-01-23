@@ -1,21 +1,20 @@
 {
-  nixosTest,
   epnix,
-  epnixLib,
-  myIoc,
+  epnixConfig,
+  pkgs,
   ...
 }:
-nixosTest {
+pkgs.nixosTest {
   name = "simple";
 
-  nodes.machine = {
-    imports = [epnixLib.inputs.self.nixosModules.nixos];
-    environment.systemPackages = [epnix.epics-base];
+  nodes.machine = {config, ...}: {
+    imports = [
+      epnix.nixosModules.ioc
+      epnixConfig
+    ];
+    environment.systemPackages = [pkgs.epnix.epics-base];
 
-    services.iocs.myIoc = {
-      package = myIoc;
-      workingDirectory = "iocBoot/iocMyIoc";
-    };
+    systemd.services.ioc = config.epnix.nixos.services.ioc.config;
   };
 
   testScript = ''

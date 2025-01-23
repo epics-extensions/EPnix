@@ -12,9 +12,9 @@ nixosTest {
     imports = [epnixLib.inputs.self.nixosModules.nixos];
     environment.systemPackages = [epnix.epics-base];
 
-    services.iocs.myIoc = {
+    services.iocs.myExampleIoc = {
       package = myIoc;
-      workingDirectory = "iocBoot/iocMyIoc";
+      workingDirectory = "iocBoot/iocMyExample";
     };
   };
 
