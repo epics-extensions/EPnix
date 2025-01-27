@@ -51,7 +51,7 @@ jobs:
           persist-credentials: false
 
       - uses: cachix/install-nix-action@3715ab1a11cac9e991980d7b4a28d80c7ebdd8f9 # v27
-      - uses: DeterminateSystems/magic-nix-cache-action@87b14cf437d03d37989d87f0fa5ce4f5dc1a330b # v8
+      - uses: DeterminateSystems/magic-nix-cache-action@6221693898146dc97e38ad0e013488a16477a4c4 # v9
 
       - name: "Build documentation books"
         run: |
