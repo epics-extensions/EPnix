@@ -1,0 +1,17 @@
+25.05 Release notes
+===================
+
+.. default-domain:: nix
+
+.. role:: nix(code)
+   :language: nix
+
+Highlights
+----------
+
+- Archiver Appliance was upgrade from 1.1.0 -> 2.0.5,
+  see the `Archiver Appliance 2.0.5 release notes`_.
+  None of the breaking change should affect users of the
+  :option:`services.archiver-appliance` NixOS options.
+
+.. _Archiver Appliance 2.0.5 release notes: https://github.com/archiver-appliance/epicsarchiverap/releases/tag/2.0.5

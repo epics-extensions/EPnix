@@ -1,24 +1,26 @@
 {
   stdenvNoCC,
   lib,
+  epnix,
   epnixLib,
   fetchFromGitHub,
   jdk,
-  ant,
-  dos2unix,
+  gradle,
+  sphinx,
   tomcat9,
+  python3Packages,
   python3,
 }:
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "archiver-appliance";
-  version = "1.1.0";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "archiver-appliance";
     repo = "epicsarchiverap";
-    rev = self.version;
+    rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-ezsjqp23BMLpqA6cdd6k0wXhAR1imOm0tyWJUaSWmiA=>";
+    hash = "sha256-X1q87+3QZaNv4bY9UjTEEr0Jrv9AEIezhygI9jgNay0=";
   };
 
   patches = [
@@ -27,34 +29,43 @@ stdenvNoCC.mkDerivation (self: {
 
     # Messes up the shebang auto-patching
     ./fix-policies-shebang.patch
+
+    ./fix-docs-build-script.patch
   ];
 
-  nativeBuildInputs = [jdk ant dos2unix];
+  nativeBuildInputs = [
+    jdk
+    gradle
+    sphinx
+    python3Packages.myst-parser
+    python3Packages.sphinx-rtd-theme
+  ];
   buildInputs = [python3];
 
+  gradleFlags = [
+    "-PprojVersion=${finalAttrs.version}"
+    "-Dorg.gradle.java.home=${jdk}"
+  ];
+
+  # Update by running `nix build .#archiver-appliance.mitmCache.updateScript && ./result`
+  mitmCache = gradle.fetchDeps {
+    pkg = epnix.archiver-appliance;
+    data = ./deps.json;
+  };
+
+  # Some PV tests fail
+  #doCheck = true;
+
   TOMCAT_HOME = "${tomcat9}";
-
-  buildPhase = ''
-    runHook preBuild
-
-    ant
-
-    runHook postBuild
-  '';
 
   installPhase = ''
     runHook preInstall
 
-    install -Dt $out/webapps ../retrieval.war ../engine.war ../etl.war ../mgmt.war
-    install -Dt $out/share/doc/archappl LICENSE NOTICE
-    cp -R docs $out/share/doc/archappl
+    install -Dt $out/webapps build/libs/{retrieval,engine,etl,mgmt}.war
+    install --mode=644 -Dt $out/share/doc/archappl LICENSE NOTICE
 
-    install -Dt $out/share/archappl/sql src/main/org/epics/archiverappliance/config/persistence/*.sql
+    install --mode=644 -Dt $out/share/archappl/sql src/main/org/epics/archiverappliance/config/persistence/*.sql
     install -Dt $out/share/archappl/ src/sitespecific/tests/classpathfiles/policies.py
-    # DOS-style line-ending messes up shebang auto-patching
-    dos2unix $out/share/archappl/policies.py
-
-    install -Dt $out ../archappl*.tar.gz
 
     runHook postInstall
   '';
@@ -75,5 +86,10 @@ stdenvNoCC.mkDerivation (self: {
     ];
     maintainers = with epnixLib.maintainers; [minijackson];
     inherit (jdk.meta) platforms;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      # gradle dependencies
+      binaryBytecode
+    ];
   };
 })
