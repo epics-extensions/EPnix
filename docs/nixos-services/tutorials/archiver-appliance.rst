@@ -288,8 +288,8 @@ enabling you to go back to a previous configuration.
 
 You have now configured Archiver Appliance on NixOS.
 
-.. _Archiver Appliance Details: https://slacmshankar.github.io/epicsarchiver_docs/details.html
-.. _various tables: https://github.com/slacmshankar/epicsarchiverap/blob/master/src/main/org/epics/archiverappliance/config/persistence/archappl_mysql.sql
+.. _Archiver Appliance Details: https://epicsarchiver.readthedocs.io/en/stable/developer/details.html#architecture
+.. _various tables: https://github.com/archiver-appliance/epicsarchiverap/blob/master/src/main/org/epics/archiverappliance/config/persistence/archappl_mysql.sql
 
 Next steps
 ----------

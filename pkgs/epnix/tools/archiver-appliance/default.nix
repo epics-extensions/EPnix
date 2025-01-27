@@ -61,7 +61,7 @@ stdenvNoCC.mkDerivation (self: {
 
   meta = {
     description = "Implementation of an archiver for EPICS control systems that aims to archive millions of PVs";
-    homepage = "https://slacmshankar.github.io/epicsarchiver_docs/index.html";
+    homepage = "https://epicsarchiver.readthedocs.io/en/stable/";
     license = with lib.licenses;
     with epnixLib.licenses; [
       epics
