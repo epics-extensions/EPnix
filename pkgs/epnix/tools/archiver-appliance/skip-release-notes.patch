@@ -1,13 +1,12 @@
-diff --git a/build.xml b/build.xml
-index b951fea..a328ae1 100644
---- a/build.xml
-+++ b/build.xml
-@@ -45,7 +45,7 @@
+diff --git a/build.gradle b/build.gradle
+index ab47afb6e2..f6edd72f93 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -366,7 +366,6 @@
+ 	dependsOn "retreivalWar"
+ 	dependsOn "etlWar"
+ 	dependsOn "engineWar"
+-	dependsOn "generateReleaseNotes"
  
- 	<echo>Building the archiver appliance for the site ${archapplsite}</echo>
- 
--    <target name="wars" depends="clean, retrieval_war, engine_war, etl_war, mgmt_war, generate_release_notes">
-+    <target name="wars" depends="clean, retrieval_war, engine_war, etl_war, mgmt_war">
-     	<tar destfile="${wardest}/archappl_v${version}.tar.gz" basedir="${wardest}" compression="gzip" includes="mgmt.war engine.war etl.war retrieval.war">
-     		<tarfileset dir="${docs}/samples" filemode="755">
-     			<include name="quickstart.sh"/>
+ 	archiveFileName = "archappl_v${version}.tar.gz"
+ 	compression = Compression.GZIP

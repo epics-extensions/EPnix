@@ -71,12 +71,20 @@
     .handlers = java.util.logging.ConsoleHandler
   '';
 
-  log4jProperties = pkgs.writeTextDir "/log4j.properties" ''
-    log4j.rootLogger = ERROR, stdout
-    log4j.logger.config.org.epics.archiverappliance = INFO
-    log4j.appender.stdout=org.apache.log4j.ConsoleAppender
-    log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
-    log4j.appender.stdout.layout.ConversionPattern=[%d] %p %m (%c)%n
+  log4j2Xml = pkgs.writeTextDir "/log4j2.xml" ''
+    <Configuration>
+      <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+          <PatternLayout pattern="%p %m (%c)%n"/>
+        </Console>
+        </Appenders>
+        <Loggers>
+          <Logger name="org.apache.log4j.xml" level="info"/>
+          <Root level="info">
+            <AppenderRef ref="STDOUT"/>
+          </Root>
+        </Loggers>
+    </Configuration>
   '';
 in {
   options.services.archiver-appliance = {
@@ -284,7 +292,7 @@ in {
       ];
 
       commonLibs = [
-        "${log4jProperties}/log4j.properties"
+        "${log4j2Xml}/log4j2.xml"
 
         # We use the mariadb connecter, since it supports UNIX socket connection,
         # which allows us not not store the password in plaintext in the config.

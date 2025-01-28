@@ -77,7 +77,9 @@ in
 
       # EPICS related tools and extensions
 
-      archiver-appliance = callPackage ./epnix/tools/archiver-appliance {};
+      archiver-appliance = callPackage ./epnix/tools/archiver-appliance {
+        jdk = prev.jdk17;
+      };
 
       ca-gateway = callPackage ./epnix/tools/ca-gateway {};
 

@@ -1,0 +1,17 @@
+diff --git a/docs/build_docs.sh b/docs/build_docs.sh
+index d9b167e0c4..6824c52fa6 100755
+--- a/docs/build_docs.sh
++++ b/docs/build_docs.sh
+@@ -1,4 +1,4 @@
+-#! /bin/bash
++#!/bin/sh
+ if ! command -v sphinx-build &> /dev/null
+ then
+     echo "Instaling sphinx-build in a new virtual environment"
+@@ -10,4 +10,4 @@
+ else
+     echo "Using sphinx-build from the environment"
+ fi
+-sphinx-build docs/source docs/build
+\ No newline at end of file
++sphinx-build docs/source docs/build
